@@ -11,22 +11,26 @@ export const Navbar: React.FC = () => {
     navigate('/login');
   };
 
-  const navLinkStyle = ({ isActive }: { isActive: boolean }) => ({
-    padding: '0.5rem 0.85rem',
-    borderRadius: 'var(--radius-sm)',
-    color: '#ffffff',
-    fontWeight: isActive ? 700 : 500,
-    backgroundColor: isActive ? 'var(--color-palette-3)' : 'transparent',
-    fontSize: '0.925rem',
-    transition: 'background-color 0.15s ease',
+  const getNavLinkStyle = ({ isActive }: { isActive: boolean }) => ({
+    padding: '0.5rem 0.9rem',
+    fontFamily: 'var(--font-heading)',
+    textTransform: 'uppercase' as const,
+    fontWeight: 700,
+    fontSize: '0.95rem',
+    color: isActive ? 'var(--color-dark)' : 'var(--color-light)',
+    backgroundColor: isActive ? 'var(--color-bg)' : 'transparent',
+    border: '3px solid var(--color-light)',
+    boxShadow: isActive ? '3px 3px 0 var(--color-light)' : 'none',
+    transition: 'transform 120ms ease, box-shadow 120ms ease',
+    display: 'inline-block',
   });
 
   return (
     <header
       style={{
-        backgroundColor: 'var(--color-palette-1)',
-        borderBottom: '2px solid var(--color-palette-2)',
-        padding: '0.75rem 1.5rem',
+        backgroundColor: 'var(--color-dark)',
+        borderBottom: 'var(--border-thick)',
+        padding: '1rem 1.5rem',
       }}
     >
       <div
@@ -45,8 +49,8 @@ export const Navbar: React.FC = () => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.5rem',
-            color: '#ffffff',
+            gap: '0.75rem',
+            color: 'var(--color-light)',
           }}
         >
           <span
@@ -54,36 +58,57 @@ export const Navbar: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '32px',
-              height: '32px',
-              backgroundColor: 'var(--color-palette-3)',
-              borderRadius: 'var(--radius-sm)',
+              width: '38px',
+              height: '38px',
+              backgroundColor: 'var(--color-bg)',
+              color: 'var(--color-dark)',
+              border: '3px solid var(--color-light)',
+              boxShadow: '3px 3px 0 var(--color-light)',
               fontWeight: 800,
-              fontSize: '1.1rem',
+              fontSize: '1.25rem',
+              fontFamily: 'var(--font-heading)',
             }}
           >
             S
           </span>
           <div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, lineHeight: 1.1 }}>
-              ShelfLife
+            <h1
+              style={{
+                fontSize: '1.5rem',
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 800,
+                lineHeight: 1,
+                color: 'var(--color-light)',
+                letterSpacing: '-0.5px',
+              }}
+            >
+              SHELFLIFE
             </h1>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-palette-4)' }}>
+            <p
+              style={{
+                fontSize: '0.75rem',
+                color: 'var(--color-light)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginTop: '0.2rem',
+              }}
+            >
               College Library Platform
             </p>
           </div>
         </Link>
 
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
           {isAuthenticated && (
             <>
-              <NavLink to="/books" style={navLinkStyle}>
+              <NavLink to="/books" style={getNavLinkStyle}>
                 Books
               </NavLink>
-              <NavLink to="/borrow" style={navLinkStyle}>
+              <NavLink to="/borrow" style={getNavLinkStyle}>
                 Issue Book
               </NavLink>
-              <NavLink to="/members" style={navLinkStyle}>
+              <NavLink to="/members" style={getNavLinkStyle}>
                 Member History
               </NavLink>
             </>
@@ -91,12 +116,12 @@ export const Navbar: React.FC = () => {
 
           <div
             style={{
-              marginLeft: '0.75rem',
+              marginLeft: '0.5rem',
               paddingLeft: '0.75rem',
-              borderLeft: '1px solid var(--color-palette-2)',
+              borderLeft: '3px solid var(--color-primary)',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.5rem',
+              gap: '0.75rem',
             }}
           >
             {isAuthenticated ? (
@@ -104,22 +129,30 @@ export const Navbar: React.FC = () => {
                 <span
                   style={{
                     fontSize: '0.8rem',
-                    color: 'var(--color-palette-4)',
-                    padding: '0.2rem 0.5rem',
-                    border: '1px solid var(--color-palette-3)',
-                    borderRadius: 'var(--radius-sm)',
+                    fontFamily: 'var(--font-heading)',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                    color: 'var(--color-light)',
+                    backgroundColor: 'var(--color-primary)',
+                    padding: '0.35rem 0.65rem',
+                    border: '3px solid var(--color-light)',
                   }}
                 >
                   Librarian
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="btn btn-outline"
                   style={{
-                    color: '#ffffff',
-                    borderColor: 'var(--color-palette-4)',
-                    padding: '0.4rem 0.75rem',
+                    backgroundColor: 'var(--color-bg)',
+                    color: 'var(--color-dark)',
+                    border: '3px solid var(--color-light)',
+                    boxShadow: '3px 3px 0 var(--color-light)',
+                    padding: '0.45rem 0.9rem',
                     fontSize: '0.85rem',
+                    fontFamily: 'var(--font-heading)',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
                   }}
                 >
                   Logout
@@ -128,10 +161,17 @@ export const Navbar: React.FC = () => {
             ) : (
               <Link
                 to="/login"
-                className="btn btn-primary"
                 style={{
-                  padding: '0.4rem 0.85rem',
-                  fontSize: '0.85rem',
+                  backgroundColor: 'var(--color-primary)',
+                  color: 'var(--color-light)',
+                  border: '3px solid var(--color-light)',
+                  boxShadow: '3px 3px 0 var(--color-light)',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.9rem',
+                  fontFamily: 'var(--font-heading)',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  display: 'inline-block',
                 }}
               >
                 Librarian Login

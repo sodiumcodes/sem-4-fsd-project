@@ -11,7 +11,10 @@ const borrowRoutes = require('./routes/borrowRoutes');
 const app = express();
 
 // Global Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.VITE_API_URL || "http://localhost:3000",
+  credentials: true,
+}));
 app.use(express.json());
 app.use(requestLogger);
 

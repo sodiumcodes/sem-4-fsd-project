@@ -22,7 +22,7 @@ export function Select<T>({
   onChange,
   getOptionValue,
   getOptionLabel,
-  placeholder = 'Select an option...',
+  placeholder = 'SELECT AN OPTION...',
   disabled = false,
   required = false,
   error,
@@ -31,7 +31,7 @@ export function Select<T>({
     <div className="form-group">
       {label && (
         <label htmlFor={id} className="form-label">
-          {label} {required && <span style={{ color: 'var(--color-palette-3)' }}>*</span>}
+          {label} {required && <span>*</span>}
         </label>
       )}
       <select
@@ -54,7 +54,7 @@ export function Select<T>({
         })}
       </select>
       {error && (
-        <span style={{ fontSize: '0.8rem', color: 'var(--color-palette-1)' }}>
+        <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-dark)' }}>
           {error}
         </span>
       )}

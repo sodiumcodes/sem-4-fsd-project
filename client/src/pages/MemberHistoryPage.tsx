@@ -78,7 +78,7 @@ export const MemberHistoryPage: React.FC = () => {
       const res = await borrowApi.returnBook(borrowId);
       setToastMessage({
         type: 'success',
-        text: `"${bookTitle}" returned successfully! Remaining available copies: ${res.bookAvailableCopies}`,
+        text: `"${bookTitle.toUpperCase()}" returned successfully! Remaining available copies: ${res.bookAvailableCopies}`,
       });
       // Refresh history
       if (selectedMemberId) {
@@ -110,12 +110,12 @@ export const MemberHistoryPage: React.FC = () => {
         const bookObj = typeof record.book === 'object' ? (record.book as Book) : null;
         return (
           <div>
-            <div style={{ fontWeight: 600, color: 'var(--color-palette-1)' }}>
-              {bookObj ? bookObj.title : 'Book ID: ' + record.book}
+            <div style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--color-dark)' }}>
+              {bookObj ? bookObj.title.toUpperCase() : 'BOOK ID: ' + record.book}
             </div>
             {bookObj && (
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-palette-2)' }}>
-                {bookObj.author} • {bookObj.genre} (ISBN: {bookObj.ISBN})
+              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-dark)', marginTop: '0.2rem' }}>
+                BY {bookObj.author.toUpperCase()} • {bookObj.genre.toUpperCase()} (ISBN: {bookObj.ISBN})
               </div>
             )}
           </div>
@@ -129,7 +129,7 @@ export const MemberHistoryPage: React.FC = () => {
     {
       header: 'Due Date',
       accessor: (record) => (
-        <span style={{ fontWeight: isRecordOverdue(record) ? 700 : 400 }}>
+        <span style={{ fontWeight: isRecordOverdue(record) ? 700 : 600 }}>
           {new Date(record.dueDate).toLocaleDateString()}
         </span>
       ),
@@ -140,7 +140,7 @@ export const MemberHistoryPage: React.FC = () => {
         record.returnDate ? (
           new Date(record.returnDate).toLocaleDateString()
         ) : (
-          <span style={{ color: 'var(--color-palette-2)', fontStyle: 'italic' }}>Pending</span>
+          <span style={{ fontWeight: 700 }}>PENDING</span>
         ),
     },
     {
@@ -149,23 +149,15 @@ export const MemberHistoryPage: React.FC = () => {
         const overdue = isRecordOverdue(record);
         if (overdue) {
           return (
-            <span
-              className="badge badge-overdue"
-              style={{
-                backgroundColor: 'var(--color-palette-1)',
-                color: '#ffffff',
-                border: '2px solid var(--color-palette-4)',
-                padding: '0.3rem 0.6rem',
-              }}
-            >
-              ⚠ Overdue
+            <span className="badge badge-overdue">
+              [OVERDUE]
             </span>
           );
         }
         if (record.status === 'returned') {
-          return <span className="badge badge-returned">Returned</span>;
+          return <span className="badge badge-returned">RETURNED</span>;
         }
-        return <span className="badge badge-issued">Issued</span>;
+        return <span className="badge badge-issued">ISSUED</span>;
       },
     },
     {
@@ -176,20 +168,20 @@ export const MemberHistoryPage: React.FC = () => {
           typeof record.book === 'object' ? (record.book as Book).title : 'Book';
 
         if (isReturned) {
-          return <span style={{ color: 'var(--color-palette-4)', fontSize: '0.85rem' }}>Completed</span>;
+          return <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>COMPLETED</span>;
         }
 
         return isAuthenticated ? (
           <button
             onClick={() => handleReturnBook(record._id, bookTitle)}
-            className="btn btn-outline"
-            style={{ padding: '0.35rem 0.75rem', fontSize: '0.825rem' }}
+            className="btn btn-secondary"
+            style={{ padding: '0.45rem 0.85rem', fontSize: '0.85rem' }}
             disabled={returningId === record._id}
           >
-            {returningId === record._id ? 'Returning...' : 'Return Book'}
+            {returningId === record._id ? 'RETURNING...' : 'RETURN BOOK'}
           </button>
         ) : (
-          <span style={{ fontSize: '0.8rem', color: 'var(--color-palette-2)' }}>Login to Return</span>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>LOGIN TO RETURN</span>
         );
       },
     },
@@ -199,8 +191,8 @@ export const MemberHistoryPage: React.FC = () => {
     <div>
       <div className="page-header">
         <div>
-          <h2 className="page-title">Member Borrow History</h2>
-          <p className="page-subtitle">Track issued books, return dates, and overdue items</p>
+          <h2 className="page-title">MEMBER BORROW HISTORY</h2>
+          <p className="page-subtitle">TRACK ISSUED BOOKS, RETURN DATES, AND OVERDUE ITEMS</p>
         </div>
       </div>
 
@@ -211,67 +203,57 @@ export const MemberHistoryPage: React.FC = () => {
           }`}
           role="status"
         >
-          {toastMessage.text}
+          <span>{toastMessage.type === 'success' ? '[SUCCESS]' : '[ERROR]'}</span>
+          <span>{toastMessage.text}</span>
         </div>
       )}
 
       {/* Member Selector Card */}
-      <div className="card" style={{ marginBottom: '1.5rem' }}>
+      <div className="card" style={{ marginBottom: '2rem' }}>
         {isLoadingMembers ? (
-          <p style={{ color: 'var(--color-palette-2)' }}>Loading registered members...</p>
+          <div className="nb-loading-box">
+            LOADING REGISTERED MEMBERS...
+          </div>
         ) : members.length === 0 ? (
-          <p style={{ color: 'var(--color-palette-1)' }}>No members registered yet.</p>
+          <p style={{ fontWeight: 700 }}>NO MEMBERS REGISTERED YET.</p>
         ) : (
           <Select<Member>
             id="history-member-select"
-            label="Select Member to View History"
+            label="SELECT MEMBER TO VIEW HISTORY"
             options={members}
             value={selectedMemberId}
             onChange={setSelectedMemberId}
             getOptionValue={(m) => m._id}
-            getOptionLabel={(m) => `${m.name} (${m.membershipId}) — ${m.email}`}
-            placeholder="-- Choose a member --"
+            getOptionLabel={(m) => `${m.name.toUpperCase()} (${m.membershipId}) — ${m.email}`}
+            placeholder="-- CHOOSE A MEMBER --"
           />
         )}
       </div>
 
-      {/* Member Details Summary */}
+      {/* Member Details Summary Card */}
       {currentMember && (
         <div
+          className="card"
           style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid var(--color-palette-4)',
-            borderRadius: 'var(--radius-md)',
-            padding: '1.25rem',
-            marginBottom: '1.5rem',
+            marginBottom: '2rem',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: '1rem',
+            gap: '1.25rem',
           }}
         >
           <div>
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--color-palette-1)' }}>
-              {currentMember.name}
+            <h3 style={{ fontSize: '1.5rem', color: 'var(--color-dark)' }}>
+              {currentMember.name.toUpperCase()}
             </h3>
-            <p style={{ fontSize: '0.875rem', color: 'var(--color-palette-2)' }}>
-              Membership ID: <strong>{currentMember.membershipId}</strong> | Email: {currentMember.email}
+            <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-dark)', marginTop: '0.35rem' }}>
+              MEMBERSHIP ID: <strong>{currentMember.membershipId}</strong> | EMAIL: {currentMember.email}
             </p>
           </div>
           <div>
-            <span
-              style={{
-                fontSize: '0.85rem',
-                backgroundColor: '#f4f7f5',
-                border: '1px solid var(--color-palette-4)',
-                padding: '0.35rem 0.75rem',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--color-palette-1)',
-                fontWeight: 600,
-              }}
-            >
-              Total Records: {history.length}
+            <span className="badge badge-issued" style={{ fontSize: '1rem', padding: '0.5rem 1rem' }}>
+              TOTAL RECORDS: {history.length}
             </span>
           </div>
         </div>
@@ -283,7 +265,7 @@ export const MemberHistoryPage: React.FC = () => {
         columns={columns}
         keyExtractor={(item) => item._id}
         isLoading={isLoadingHistory}
-        emptyMessage="This member has no borrowing history."
+        emptyMessage="THIS MEMBER HAS NO BORROWING HISTORY."
       />
     </div>
   );

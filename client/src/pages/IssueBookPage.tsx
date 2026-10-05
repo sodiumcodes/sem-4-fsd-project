@@ -16,7 +16,7 @@ export const IssueBookPage: React.FC = () => {
   // Form states
   const [selectedBookId, setSelectedBookId] = useState<string>(preselectedBookId);
   const [selectedMemberId, setSelectedMemberId] = useState<string>(preselectedMemberId);
-  
+
   // Default due date: 14 days from today
   const defaultDueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
     .toISOString()
@@ -128,11 +128,11 @@ export const IssueBookPage: React.FC = () => {
   const selectedBook = books.find((b) => b._id === selectedBookId);
 
   return (
-    <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '780px', margin: '0 auto' }}>
       <div className="page-header">
         <div>
-          <h2 className="page-title">Issue a Book</h2>
-          <p className="page-subtitle">Record book borrowing for library members</p>
+          <h2 className="page-title">ISSUE A BOOK</h2>
+          <p className="page-subtitle">RECORD BOOK BORROWING FOR COLLEGE LIBRARY MEMBERS</p>
         </div>
       </div>
 
@@ -143,72 +143,72 @@ export const IssueBookPage: React.FC = () => {
           }`}
           role="status"
         >
-          {toastMessage.text}
+          <span>{toastMessage.type === 'success' ? '[SUCCESS]' : '[ERROR]'}</span>
+          <span>{toastMessage.text}</span>
         </div>
       )}
 
       {/* Main Issue Book Form Card */}
       <div className="card">
         {isLoadingData ? (
-          <p style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--color-palette-2)' }}>
-            Loading library books and members...
-          </p>
+          <div className="nb-loading-box">
+            LOADING CATALOG & MEMBERS...
+          </div>
         ) : (
           <form onSubmit={handleIssueSubmit}>
             {/* Generic Typed Select for Books */}
             <Select<Book>
               id="select-book"
-              label="Select Book"
+              label="SELECT BOOK"
               options={books}
               value={selectedBookId}
               onChange={setSelectedBookId}
               getOptionValue={(b) => b._id}
               getOptionLabel={(b) =>
-                `${b.title} — by ${b.author} (${b.availableCopies} of ${b.totalCopies} available)`
+                `${b.title.toUpperCase()} — BY ${b.author.toUpperCase()} (${b.availableCopies} OF ${b.totalCopies} COPIES AVAILABLE)`
               }
-              placeholder="-- Choose a book from the catalog --"
+              placeholder="-- CHOOSE A BOOK FROM THE CATALOG --"
               required
             />
 
             {selectedBook && selectedBook.availableCopies <= 0 && (
               <div
+                className="badge badge-overdue"
                 style={{
-                  fontSize: '0.85rem',
-                  color: '#ffffff',
-                  backgroundColor: 'var(--color-palette-1)',
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: 'var(--radius-sm)',
-                  marginBottom: '1rem',
+                  display: 'block',
+                  textAlign: 'center',
+                  marginBottom: '1.5rem',
+                  padding: '0.75rem',
                 }}
               >
-                Warning: This book currently has 0 available copies in stock.
+                WARNING: THIS BOOK HAS 0 AVAILABLE COPIES IN STOCK.
               </div>
             )}
 
             {/* Generic Typed Select for Members */}
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-end' }}>
-              <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 300px' }}>
                 <Select<Member>
                   id="select-member"
-                  label="Select Member"
+                  label="SELECT MEMBER"
                   options={members}
                   value={selectedMemberId}
                   onChange={setSelectedMemberId}
                   getOptionValue={(m) => m._id}
-                  getOptionLabel={(m) => `${m.name} (${m.membershipId}) - ${m.email}`}
-                  placeholder="-- Choose a registered member --"
+                  getOptionLabel={(m) => `${m.name.toUpperCase()} (${m.membershipId}) — ${m.email}`}
+                  placeholder="-- CHOOSE A REGISTERED MEMBER --"
                   required
                 />
               </div>
 
-              <div style={{ marginBottom: '1.25rem' }}>
+              <div style={{ marginBottom: '1.5rem' }}>
                 <button
                   type="button"
                   onClick={() => setShowMemberModal((prev) => !prev)}
-                  className="btn btn-outline"
+                  className="btn btn-secondary"
                   style={{ whiteSpace: 'nowrap' }}
                 >
-                  + New Member
+                  {showMemberModal ? 'CLOSE FORM' : '+ NEW MEMBER'}
                 </button>
               </div>
             </div>
@@ -217,17 +217,17 @@ export const IssueBookPage: React.FC = () => {
             {showMemberModal && (
               <div
                 style={{
-                  backgroundColor: '#f4f7f5',
-                  border: '1px solid var(--color-palette-4)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '1rem',
-                  marginBottom: '1.25rem',
+                  backgroundColor: 'var(--color-bg)',
+                  border: 'var(--border-thick)',
+                  boxShadow: 'var(--shadow-card)',
+                  padding: '1.5rem',
+                  marginBottom: '1.75rem',
                 }}
               >
-                <h4 style={{ color: 'var(--color-palette-1)', marginBottom: '0.75rem' }}>
-                  Quick Member Registration
+                <h4 style={{ color: 'var(--color-dark)', marginBottom: '1rem', fontSize: '1.15rem' }}>
+                  QUICK MEMBER REGISTRATION
                 </h4>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                   <input
                     className="form-input"
                     placeholder="Full Name *"
@@ -251,23 +251,21 @@ export const IssueBookPage: React.FC = () => {
                     required
                   />
                 </div>
-                <div style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem' }}>
+                <div style={{ marginTop: '1rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                   <button
                     type="button"
                     onClick={handleCreateMember}
                     className="btn btn-primary"
                     disabled={isCreatingMember || !newMember.name || !newMember.email || !newMember.membershipId}
-                    style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem' }}
                   >
-                    {isCreatingMember ? 'Registering...' : 'Register Member'}
+                    {isCreatingMember ? 'REGISTERING...' : 'REGISTER MEMBER'}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowMemberModal(false)}
-                    className="btn btn-outline"
-                    style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem' }}
+                    className="btn btn-secondary"
                   >
-                    Cancel
+                    CANCEL
                   </button>
                 </div>
               </div>
@@ -276,7 +274,7 @@ export const IssueBookPage: React.FC = () => {
             {/* Due Date Input */}
             <div className="form-group">
               <label htmlFor="dueDate" className="form-label">
-                Due Date <span style={{ color: 'var(--color-palette-3)' }}>*</span>
+                DUE DATE *
               </label>
               <input
                 id="dueDate"
@@ -289,14 +287,14 @@ export const IssueBookPage: React.FC = () => {
               />
             </div>
 
-            <div style={{ marginTop: '1.75rem' }}>
+            <div style={{ marginTop: '2rem' }}>
               <button
                 type="submit"
                 className="btn btn-primary"
-                style={{ width: '100%', padding: '0.75rem' }}
+                style={{ width: '100%', padding: '1rem', fontSize: '1.1rem' }}
                 disabled={isSubmitting || !selectedBookId || !selectedMemberId || selectedBook?.availableCopies === 0}
               >
-                {isSubmitting ? 'Issuing Book...' : 'Confirm & Issue Book'}
+                {isSubmitting ? 'ISSUING...' : 'CONFIRM & ISSUE BOOK'}
               </button>
             </div>
           </form>

@@ -79,7 +79,7 @@ export const BookListPage: React.FC = () => {
         totalCopies: Number(newBook.totalCopies),
         availableCopies: Number(newBook.availableCopies),
       });
-      setFormSuccess(`Book "${newBook.title}" added successfully!`);
+      setFormSuccess(`Book "${newBook.title.toUpperCase()}" added successfully!`);
       setNewBook({
         title: '',
         author: '',
@@ -103,29 +103,23 @@ export const BookListPage: React.FC = () => {
       header: 'Title',
       accessor: (book) => (
         <div>
-          <div style={{ fontWeight: 600, color: 'var(--color-palette-1)' }}>{book.title}</div>
-          <div style={{ fontSize: '0.8rem', color: 'var(--color-palette-2)' }}>ISBN: {book.ISBN}</div>
+          <div style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--color-dark)' }}>
+            {book.title}
+          </div>
+          <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-dark)', marginTop: '0.2rem' }}>
+            ISBN: {book.ISBN}
+          </div>
         </div>
       ),
     },
     {
       header: 'Author',
-      accessor: 'author',
+      accessor: (book) => <span style={{ fontWeight: 600 }}>{book.author}</span>,
     },
     {
       header: 'Genre',
       accessor: (book) => (
-        <span
-          style={{
-            fontSize: '0.825rem',
-            padding: '0.2rem 0.5rem',
-            backgroundColor: '#f4f7f5',
-            border: '1px solid var(--color-palette-4)',
-            borderRadius: 'var(--radius-sm)',
-            color: 'var(--color-palette-2)',
-            fontWeight: 500,
-          }}
-        >
+        <span className="badge badge-returned">
           {book.genre}
         </span>
       ),
@@ -133,11 +127,9 @@ export const BookListPage: React.FC = () => {
     {
       header: 'Copies',
       accessor: (book) => (
-        <div style={{ fontSize: '0.875rem' }}>
-          <span>
-            {book.availableCopies} / {book.totalCopies}
-          </span>
-        </div>
+        <span style={{ fontWeight: 700 }}>
+          {book.availableCopies} / {book.totalCopies}
+        </span>
       ),
     },
     {
@@ -146,29 +138,30 @@ export const BookListPage: React.FC = () => {
         const isAvailable = book.availableCopies > 0;
         return (
           <span className={`badge ${isAvailable ? 'badge-available' : 'badge-overdue'}`}>
-            {isAvailable ? `${book.availableCopies} Available` : 'Out of Stock'}
+            {isAvailable ? `${book.availableCopies} AVAILABLE` : 'OUT OF STOCK'}
           </span>
         );
       },
     },
     {
       header: 'Action',
-      accessor: (book) => (
-        <Link
-          to={`/borrow?bookId=${book._id}`}
-          className="btn btn-outline"
-          style={{
-            padding: '0.3rem 0.65rem',
-            fontSize: '0.8rem',
-            borderColor: book.availableCopies > 0 ? 'var(--color-palette-3)' : 'var(--color-palette-4)',
-            color: book.availableCopies > 0 ? 'var(--color-palette-2)' : 'var(--color-palette-4)',
-            pointerEvents: book.availableCopies > 0 ? 'auto' : 'none',
-            opacity: book.availableCopies > 0 ? 1 : 0.5,
-          }}
-        >
-          Issue Book
-        </Link>
-      ),
+      accessor: (book) => {
+        const isAvailable = book.availableCopies > 0;
+        return (
+          <Link
+            to={isAvailable ? `/borrow?bookId=${book._id}` : '#'}
+            className="btn btn-secondary"
+            style={{
+              padding: '0.45rem 0.85rem',
+              fontSize: '0.85rem',
+              pointerEvents: isAvailable ? 'auto' : 'none',
+              opacity: isAvailable ? 1 : 0.6,
+            }}
+          >
+            ISSUE BOOK
+          </Link>
+        );
+      },
     },
   ];
 
@@ -176,8 +169,8 @@ export const BookListPage: React.FC = () => {
     <div>
       <div className="page-header">
         <div>
-          <h2 className="page-title">Library Book Catalog</h2>
-          <p className="page-subtitle">Browse, search, and manage books in the college library</p>
+          <h2 className="page-title">LIBRARY BOOK CATALOG</h2>
+          <p className="page-subtitle">BROWSE, SEARCH, AND MANAGE BOOKS IN THE COLLEGE LIBRARY</p>
         </div>
 
         {isAuthenticated && (
@@ -185,14 +178,15 @@ export const BookListPage: React.FC = () => {
             onClick={() => setShowAddForm((prev) => !prev)}
             className="btn btn-primary"
           >
-            {showAddForm ? 'Close Add Form' : '+ Add New Book'}
+            {showAddForm ? 'CLOSE ADD FORM' : '+ ADD NEW BOOK'}
           </button>
         )}
       </div>
 
       {formSuccess && (
         <div className="toast-box toast-success" role="status">
-          {formSuccess}
+          <span>[SUCCESS]</span>
+          <span>{formSuccess}</span>
         </div>
       )}
 
@@ -202,16 +196,16 @@ export const BookListPage: React.FC = () => {
           className="card"
           style={{
             marginBottom: '2rem',
-            border: '2px solid var(--color-palette-3)',
           }}
         >
-          <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--color-palette-1)' }}>
-            Add Book to Catalog
+          <h3 style={{ fontSize: '1.35rem', marginBottom: '1.25rem', color: 'var(--color-dark)' }}>
+            ADD BOOK TO CATALOG
           </h3>
 
           {formError && (
             <div className="toast-box toast-error" role="alert">
-              {formError}
+              <span>[ERROR]</span>
+              <span>{formError}</span>
             </div>
           )}
 
@@ -219,8 +213,8 @@ export const BookListPage: React.FC = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '1rem',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: '1.25rem',
               }}
             >
               <div className="form-group">
@@ -316,86 +310,77 @@ export const BookListPage: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ marginTop: '1rem', display: 'flex', gap: '0.75rem' }}>
+            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? 'Saving Book...' : 'Save Book'}
+                {isSubmitting ? 'SAVING BOOK...' : 'SAVE BOOK'}
               </button>
               <button
                 type="button"
-                className="btn btn-outline"
+                className="btn btn-secondary"
                 onClick={() => setShowAddForm(false)}
               >
-                Cancel
+                CANCEL
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Filter and Search Bar */}
+      {/* Filter and Search Bar in its own bordered card */}
       <div
         className="card"
         style={{
-          marginBottom: '1.5rem',
+          marginBottom: '2rem',
           display: 'flex',
-          gap: '1rem',
-          alignItems: 'center',
+          gap: '1.25rem',
+          alignItems: 'flex-end',
           flexWrap: 'wrap',
-          backgroundColor: '#ffffff',
         }}
       >
-        <div style={{ flex: '1 1 260px' }}>
-          <label
-            htmlFor="search-title"
-            style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--color-palette-1)' }}
-          >
-            Filter by Title
+        <div style={{ flex: '1 1 280px' }}>
+          <label htmlFor="search-title" className="form-label">
+            FILTER BY TITLE
           </label>
           <input
             id="search-title"
             type="text"
             className="form-input"
-            style={{ width: '100%' }}
             placeholder="Type to filter titles..."
             value={titleSearch}
             onChange={(e) => setTitleSearch(e.target.value)}
           />
         </div>
 
-        <div style={{ flex: '0 1 220px' }}>
-          <label
-            htmlFor="filter-genre"
-            style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--color-palette-1)' }}
-          >
-            Filter by Genre
+        <div style={{ flex: '0 1 260px' }}>
+          <label htmlFor="filter-genre" className="form-label">
+            FILTER BY GENRE
           </label>
           <select
             id="filter-genre"
             className="form-select"
-            style={{ width: '100%' }}
             value={selectedGenre}
             onChange={(e) => setSelectedGenre(e.target.value)}
           >
-            <option value="">All Genres</option>
+            <option value="">ALL GENRES</option>
             {availableGenres.map((g) => (
               <option key={g} value={g}>
-                {g}
+                {g.toUpperCase()}
               </option>
             ))}
           </select>
         </div>
 
         {(titleSearch || selectedGenre) && (
-          <div style={{ alignSelf: 'flex-end' }}>
+          <div>
             <button
               onClick={() => {
                 setTitleSearch('');
                 setSelectedGenre('');
               }}
-              className="btn btn-outline"
-              style={{ padding: '0.6rem 0.9rem', fontSize: '0.85rem' }}
+              className="btn btn-secondary"
+              style={{ padding: '0.8rem 1.25rem' }}
             >
-              Reset Filters
+              RESET FILTERS
             </button>
           </div>
         )}
@@ -404,13 +389,14 @@ export const BookListPage: React.FC = () => {
       {/* Error State */}
       {error && (
         <div className="toast-box toast-error" role="alert">
-          {error}
+          <span>[ERROR]</span>
+          <span>{error}</span>
           <button
             onClick={fetchBooks}
-            className="btn btn-outline"
-            style={{ marginLeft: '1rem', padding: '0.25rem 0.5rem', fontSize: '0.8rem', color: '#ffffff', borderColor: '#ffffff' }}
+            className="btn btn-secondary"
+            style={{ marginLeft: 'auto', padding: '0.4rem 0.8rem', fontSize: '0.85rem' }}
           >
-            Retry
+            RETRY
           </button>
         </div>
       )}
@@ -423,8 +409,8 @@ export const BookListPage: React.FC = () => {
         isLoading={isLoading}
         emptyMessage={
           titleSearch || selectedGenre
-            ? 'No books match your search criteria.'
-            : 'No books found in the library catalog.'
+            ? 'NO BOOKS MATCH YOUR SEARCH CRITERIA.'
+            : 'NO BOOKS FOUND IN THE LIBRARY CATALOG.'
         }
       />
     </div>

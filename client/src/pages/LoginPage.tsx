@@ -44,37 +44,48 @@ export const LoginPage: React.FC = () => {
         className="card"
         style={{
           width: '100%',
-          maxWidth: '440px',
-          border: '2px solid var(--color-palette-2)',
+          maxWidth: '460px',
         }}
       >
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <span
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '48px',
-              height: '48px',
-              backgroundColor: 'var(--color-palette-2)',
-              color: '#ffffff',
-              borderRadius: 'var(--radius-md)',
+              width: '54px',
+              height: '54px',
+              backgroundColor: 'var(--color-primary)',
+              color: 'var(--color-light)',
+              border: 'var(--border-thick)',
+              boxShadow: 'var(--shadow-button)',
               fontWeight: 800,
-              fontSize: '1.5rem',
-              marginBottom: '0.75rem',
+              fontSize: '1.75rem',
+              fontFamily: 'var(--font-heading)',
+              marginBottom: '1rem',
             }}
           >
             S
           </span>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--color-palette-1)' }}>Librarian Sign In</h2>
-          <p style={{ fontSize: '0.875rem', color: 'var(--color-palette-2)', marginTop: '0.25rem' }}>
-            Access the ShelfLife administration platform
+          <h2 style={{ fontSize: '1.75rem', color: 'var(--color-dark)' }}>
+            LIBRARIAN SIGN IN
+          </h2>
+          <p
+            style={{
+              fontSize: '0.95rem',
+              color: 'var(--color-dark)',
+              fontWeight: 700,
+              marginTop: '0.4rem',
+            }}
+          >
+            ACCESS THE SHELFLIFE ADMINISTRATION PLATFORM
           </p>
         </div>
 
         {error && (
           <div className="toast-box toast-error" role="alert">
-            {error}
+            <span>[ERROR]</span>
+            <span>{error}</span>
           </div>
         )}
 
@@ -114,10 +125,10 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            style={{ width: '100%', padding: '0.75rem' }}
+            style={{ width: '100%', padding: '0.9rem', marginTop: '0.5rem' }}
             disabled={isLoading}
           >
-            {isLoading ? 'Signing In...' : 'Sign In to ShelfLife'}
+            {isLoading ? 'SIGNING IN...' : 'SIGN IN TO SHELFLIFE'}
           </button>
         </form>
       </div>

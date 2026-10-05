@@ -19,81 +19,39 @@ export function DataTable<T>({
   columns,
   keyExtractor,
   isLoading = false,
-  emptyMessage = 'No data available',
+  emptyMessage = 'NO RECORDS FOUND',
 }: DataTableProps<T>): React.ReactElement {
   if (isLoading) {
     return (
-      <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--color-palette-2)' }}>
-        <p style={{ fontWeight: 600 }}>Loading records...</p>
+      <div className="nb-loading-box" role="status">
+        LOADING RECORDS...
       </div>
     );
   }
 
   if (data.length === 0) {
     return (
-      <div
-        style={{
-          textAlign: 'center',
-          padding: '2.5rem 1rem',
-          backgroundColor: '#ffffff',
-          border: '1px dashed var(--color-border)',
-          borderRadius: 'var(--radius-md)',
-          color: 'var(--color-palette-2)',
-        }}
-      >
-        <p>{emptyMessage}</p>
+      <div className="nb-empty-box">
+        {emptyMessage}
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        overflowX: 'auto',
-        borderRadius: 'var(--radius-md)',
-        border: '1px solid var(--color-border)',
-        backgroundColor: '#ffffff',
-      }}
-    >
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          textAlign: 'left',
-          fontSize: '0.925rem',
-        }}
-      >
+    <div className="nb-table-container">
+      <table className="nb-table">
         <thead>
-          <tr
-            style={{
-              backgroundColor: 'var(--color-palette-2)',
-              color: '#ffffff',
-            }}
-          >
+          <tr>
             {columns.map((col, index) => (
-              <th
-                key={index}
-                style={{
-                  padding: '0.85rem 1rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.3px',
-                }}
-                className={col.className}
-              >
+              <th key={index} className={col.className}>
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((item, rowIndex) => (
-            <tr
-              key={keyExtractor(item)}
-              style={{
-                borderTop: '1px solid var(--color-border)',
-                backgroundColor: rowIndex % 2 === 0 ? '#ffffff' : '#f9fbf9',
-              }}
-            >
+          {data.map((item) => (
+            <tr key={keyExtractor(item)}>
               {columns.map((col, colIndex) => {
                 const cellContent =
                   typeof col.accessor === 'function'
@@ -101,14 +59,7 @@ export function DataTable<T>({
                     : (item[col.accessor] as React.ReactNode);
 
                 return (
-                  <td
-                    key={colIndex}
-                    style={{
-                      padding: '0.85rem 1rem',
-                      color: 'var(--color-palette-1)',
-                    }}
-                    className={col.className}
-                  >
+                  <td key={colIndex} className={col.className}>
                     {cellContent}
                   </td>
                 );
