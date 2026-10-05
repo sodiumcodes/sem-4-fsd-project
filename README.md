@@ -75,25 +75,6 @@ For ShelfLife's frontend architecture, we adopted a hybrid model combining **Rea
 2. **Encapsulated View Lifecycles**: Book catalog searching/filtering, the issue book form, and member borrow history belong to their respective pages. Keeping them in local state prevents stale state bugs across different user actions and enables automatic cleanup on unmount.
 3. **No Redundant Overhead**: Introducing an external state management library for this application would introduce boilerplate (actions, dispatchers, reducers) without tangible benefits. React's native state primitives keep bundle size minimal, improve code readability, and simplify maintenance.
 
----
-
-## ⚡ Race Condition Prevention Note
-
-### Problem:
-When two librarians issue the last copy (`availableCopies: 1`) of the same book at the exact same moment, standard read-then-write logic (`if (copies > 0) copies--`) results in a race condition where both check pass, decreasing stock to `-1` (overselling).
-
-### Solution:
-As implemented in [`server/controllers/borrowController.js`](file:///d:/projects/sem-4-fsd-project/server/controllers/borrowController.js):
-```javascript
-// 1. Avoid separate read-then-write checks (e.g. if copies > 0 then save) because concurrent requests can interleave.
-// 2. Instead, use an atomic conditional update: Book.findOneAndUpdate({ _id: id, availableCopies: { $gt: 0 } }, { $inc: { availableCopies: -1 } }).
-// 3. MongoDB executes document-level updates atomically under internal write locks, serializing simultaneous attempts.
-// 4. If two librarians issue the last copy simultaneously, only the first request matches the query; the second receives null.
-// 5. This guarantees availableCopies never drops below 0 and eliminates race conditions without distributed locks.
-```
-
----
-
 ## 🚀 Running the Project
 
 ### Backend:
