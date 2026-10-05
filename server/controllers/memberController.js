@@ -65,7 +65,27 @@ const getMemberHistory = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Get all members
+ * @route   GET /api/members
+ * @access  Public
+ */
+const getMembers = async (req, res, next) => {
+  try {
+    const members = await Member.find().sort({ createdAt: -1 });
+    return res.status(200).json({
+      success: true,
+      count: members.length,
+      data: members,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerMember,
+  getMembers,
   getMemberHistory,
 };
+
