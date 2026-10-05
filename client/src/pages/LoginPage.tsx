@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('librarian@shelflife.edu');
-  const [password, setPassword] = useState('Librarian@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -89,7 +89,7 @@ export const LoginPage: React.FC = () => {
               className="form-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="librarian@shelflife.edu"
+              placeholder="e.g. librarian@shelflife.edu"
               required
               disabled={isLoading}
             />
@@ -105,28 +105,10 @@ export const LoginPage: React.FC = () => {
               className="form-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="Enter password"
               required
               disabled={isLoading}
             />
-          </div>
-
-          <div
-            style={{
-              fontSize: '0.8rem',
-              backgroundColor: '#f4f7f5',
-              border: '1px solid var(--color-palette-4)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '0.65rem 0.85rem',
-              marginBottom: '1.25rem',
-              color: 'var(--color-palette-1)',
-            }}
-          >
-            <strong>Default Credentials:</strong>
-            <br />
-            Email: <code>librarian@shelflife.edu</code>
-            <br />
-            Password: <code>Librarian@123</code>
           </div>
 
           <button

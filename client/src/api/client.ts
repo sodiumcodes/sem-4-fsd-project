@@ -87,7 +87,9 @@ export const booksApi = {
     if (query?.limit) params.append('limit', query.limit.toString());
 
     const queryString = params.toString() ? `?${params.toString()}` : '';
-    return request<BooksResponse>(`/api/books${queryString}`);
+    return request<BooksResponse>(`/api/books${queryString}`, {
+      requiresAuth: true,
+    });
   },
 
   create: async (book: Omit<Book, '_id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<Book>> => {
@@ -101,7 +103,9 @@ export const booksApi = {
 
 export const membersApi = {
   getAll: async (): Promise<MembersResponse> => {
-    return request<MembersResponse>('/api/members');
+    return request<MembersResponse>('/api/members', {
+      requiresAuth: true,
+    });
   },
 
   create: async (
@@ -115,7 +119,9 @@ export const membersApi = {
   },
 
   getHistory: async (memberId: string): Promise<MemberHistoryResponse> => {
-    return request<MemberHistoryResponse>(`/api/members/${memberId}/history`);
+    return request<MemberHistoryResponse>(`/api/members/${memberId}/history`, {
+      requiresAuth: true,
+    });
   },
 };
 

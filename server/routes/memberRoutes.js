@@ -12,15 +12,16 @@ const {
   memberHistoryParamsSchema,
 } = require('../middleware/validators');
 
-// GET /api/members (public)
-router.get('/', getMembers);
+// GET /api/members (protected, librarian only)
+router.get('/', auth, getMembers);
 
 // POST /api/members (protected, librarian only)
 router.post('/', auth, validate(createMemberSchema, 'body'), registerMember);
 
-// GET /api/members/:id/history (public)
+// GET /api/members/:id/history (protected, librarian only)
 router.get(
   '/:id/history',
+  auth,
   validate(memberHistoryParamsSchema, 'params'),
   getMemberHistory
 );

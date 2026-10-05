@@ -8,8 +8,8 @@ const {
   getBooksQuerySchema,
 } = require('../middleware/validators');
 
-// GET /api/books (public, with pagination & genre filter)
-router.get('/', validate(getBooksQuerySchema, 'query'), getBooks);
+// GET /api/books (protected, librarian only)
+router.get('/', auth, validate(getBooksQuerySchema, 'query'), getBooks);
 
 // POST /api/books (protected, librarian only)
 router.post('/', auth, validate(createBookSchema, 'body'), addBook);

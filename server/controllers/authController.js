@@ -20,8 +20,8 @@ const login = async (req, res, next) => {
       });
     }
 
-    const secret = process.env.JWT_SECRET || 'shelflife_default_jwt_secret_key';
-    const expiresIn = process.env.JWT_EXPIRES_IN || '24h';
+    const secret = process.env.JWT_SECRET;
+    const expiresIn = process.env.JWT_EXPIRES_IN;
 
     const token = jwt.sign(
       {

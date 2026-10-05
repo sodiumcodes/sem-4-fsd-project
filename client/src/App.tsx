@@ -16,12 +16,26 @@ export const App: React.FC = () => {
           <Navbar />
           <main className="main-content">
             <Routes>
-              {/* Public Routes */}
+              {/* Public Route */}
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/books" element={<BookListPage />} />
-              <Route path="/members" element={<MemberHistoryPage />} />
 
-              {/* Protected Routes */}
+              {/* Protected Routes (Visible only after librarian has logged in) */}
+              <Route
+                path="/books"
+                element={
+                  <ProtectedRoute>
+                    <BookListPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/members"
+                element={
+                  <ProtectedRoute>
+                    <MemberHistoryPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/borrow"
                 element={

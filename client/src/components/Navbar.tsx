@@ -75,15 +75,19 @@ export const Navbar: React.FC = () => {
         </Link>
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <NavLink to="/books" style={navLinkStyle}>
-            Books
-          </NavLink>
-          <NavLink to="/borrow" style={navLinkStyle}>
-            Issue Book
-          </NavLink>
-          <NavLink to="/members" style={navLinkStyle}>
-            Member History
-          </NavLink>
+          {isAuthenticated && (
+            <>
+              <NavLink to="/books" style={navLinkStyle}>
+                Books
+              </NavLink>
+              <NavLink to="/borrow" style={navLinkStyle}>
+                Issue Book
+              </NavLink>
+              <NavLink to="/members" style={navLinkStyle}>
+                Member History
+              </NavLink>
+            </>
+          )}
 
           <div
             style={{

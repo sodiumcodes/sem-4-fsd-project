@@ -29,6 +29,20 @@ const borrowBook = async (req, res, next) => {
       });
     }
 
+    // Check if member already has an active borrow for this book
+    const existingBorrow = await BorrowRecord.findOne({
+      book: bookId,
+      member: memberId,
+      status: { $in: ['issued', 'overdue'] },
+    });
+
+    if (existingBorrow) {
+      return res.status(400).json({
+        success: false,
+        message: 'This member has already borrowed a copy of this book and has not returned it yet.',
+      });
+    }
+
     // Atomic conditional decrement to eliminate race condition
     const updatedBook = await Book.findOneAndUpdate(
       { _id: bookId, availableCopies: { $gt: 0 } },
